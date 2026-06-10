@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>화성형 팔란티어 시스템 — Beta v0.1</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+    }
+
+    /* ── 헤더 ── */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 52px;
+      background: rgba(13, 17, 23, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #21262d;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 20px;
+    }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #58a6ff;
+      letter-spacing: -0.02em;
+    }
+
+    .header-badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      color: #8b949e;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3fb950;
+      box-shadow: 0 0 6px #3fb95088;
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: #8b949e;
+    }
+
+    /* ── 사이드패널 ── */
+    .sidebar {
+      position: fixed;
+      top: 52px;
+      left: 0;
+      bottom: 0;
+      z-index: 900;
+      width: 340px;
+      background: #161b22;
+      border-right: 1px solid #21262d;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid #21262d;
+    }
+
+    .sidebar-section h3 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8b949e;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* 검색 */
+    .search-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 34px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-size: 13px;
+      padding: 0 10px;
+      outline: none;
+    }
+
+    .search-input:focus {
+      border-color: #58a6ff;
+    }
+
+    .btn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      background: #21262d;
+      color: #e6edf3;
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .btn:hover {
+      background: #30363d;
+    }
+
+    .btn-primary {
+      background: #1f6feb;
+      border-color: #1f6feb;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #388bfd;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 소스 필터 */
+    .filter-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .filter-chip {
+      flex: 1;
+      height: 28px;
+      border-radius: 20px;
+      border: 1px solid #30363d;
+      background: #0d1117;
+      color: #8b949e;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .filter-chip.active {
+      border-color: currentColor;
+      background: #161b22;
+    }
+
+    .filter-chip.news.active {
+      color: #58a6ff;
+    }
+
+    .filter-chip.blog.active {
+      color: #3fb950;
+    }
+
+    .filter-chip.cafe.active {
+      color: #f78166;
+    }
+
+    /* 통계 */
+    .stat-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .stat {
+      flex: 1;
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e6edf3;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #8b949e;
+      margin-top: 2px;
+    }
+
+    /* 피드 */
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+
+    .feed::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .feed::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .feed::-webkit-scrollbar-thumb {
+      background: #30363d;
+      border-radius: 2px;
+    }
+
+    .feed-item {
+      padding: 10px 16px;
+      border-bottom: 1px solid #21262d;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .feed-item:hover {
+      background: #21262d;
+    }
+
+    .feed-item.highlighted {
+      background: #1c2d3e;
+    }
+
+    .feed-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+
+    .source-tag {
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 20px;
+      font-weight: 500;
+      border: 1px solid currentColor;
+    }
+
+    .source-news {
+      color: #58a6ff;
+    }
+
+    .source-blog {
+      color: #3fb950;
+    }
+
+    .source-cafe {
+      color: #f78166;
+    }
+
+    .feed-date {
+      font-size: 10px;
+      color: #8b949e;
+      margin-left: auto;
+    }
+
+    .feed-title {
+      font-size: 13px;
+      color: #e6edf3;
+      line-height: 1.4;
+      margin-bottom: 3px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .feed-place {
+      font-size: 11px;
+      color: #8b949e;
+    }
+
+    .feed-place span {
+      color: #58a6ff;
+    }
+
+    /* 진행 */
+    .progress-bar {
+      height: 2px;
+      background: #21262d;
+      margin: 0 16px 10px;
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #1f6feb;
+      border-radius: 1px;
+      transition: width 0.3s;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 11px;
+      color: #8b949e;
+      padding: 0 16px 8px;
+    }
+
+    /* ── 지도 ── */
+    #map {
+      position: fixed;
+      top: 52px;
+      left: 340px;
+      right: 0;
+      bottom: 0;
+    }
+
+    /* 인포윈도우 커스텀 */
+    .info-wrap {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-width: 220px;
+      max-width: 280px;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .info-source {
+      font-size: 10px;
+      margin-bottom: 6px;
+    }
+
+    .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e6edf3;
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .info-place {
+      font-size: 11px;
+      color: #58a6ff;
+      margin-bottom: 8px;
+    }
+
+    .info-desc {
+      font-size: 11px;
+      color: #8b949e;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .info-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #388bfd;
+      text-decoration: none;
+    }
+
+    /* 로딩 오버레이 */
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(13, 17, 23, 0.7);
+      z-index: 100;
+      gap: 12px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .map-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #30363d;
+      border-top-color: #58a6ff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .overlay-text {
+      font-size: 13px;
+      color: #8b949e;
+    }
+
+    /* 범례 */
+    .legend {
+      position: absolute;
+      bottom: 24px;
+      right: 16px;
+      z-index: 200;
+      background: rgba(22, 27, 34, 0.92);
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 10px 14px;
+      backdrop-filter: blur(8px);
+    }
+
+    .legend-title {
+      font-size: 10px;
+      color: #8b949e;
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="header-title">화성형 팔란티어 시스템</div>
+    <span class="header-badge">Beta v0.1</span>
+    <div class="header-right">
+      <div class="status-dot" id="status-dot"></div>
+      <span class="status-text" id="status-text">대기 중</span>
+    </div>
+  </header>
+
+  <!-- 사이드바 -->
+  <aside class="sidebar">
+
+    <!-- 검색 -->
+    <div class="sidebar-section">
+      <h3>키워드 검색</h3>
+      <div class="search-row">
+        <input id="query-input" class="search-input" type="text" value="화성시" placeholder="검색어 입력..." />
+        <button class="btn btn-primary" id="search-btn" onclick="startSearch()">수집 시작</button>
+      </div>
+      <div class="filter-row">
+        <div class="filter-chip news active" data-type="news" onclick="toggleFilter(this)">📰 뉴스</div>
+        <div class="filter-chip blog active" data-type="blog" onclick="toggleFilter(this)">📝 블로그</div>
+        <div class="filter-chip cafe active" data-type="cafe" onclick="toggleFilter(this)">☕ 카페</div>
+      </div>
+    </div>
+
+    <!-- 통계 -->
+    <div class="sidebar-section">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-val" id="stat-total">0</div>
+          <div class="stat-label">총 항목</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="stat-mapped">0</div>
+          <div class="stat-label">위치 매핑</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val" id="stat-sources">0</div>
+          <div class="stat-label">소스</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 진행바 -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-text" id="progress-text"></div>
+
+    <!-- 피드 -->
+    <div class="feed" id="feed"></div>
+  </aside>
+
+  <!-- 지도 -->
+  <div id="map">
+    <div class="map-overlay" id="map-overlay">
+      <div class="spinner"></div>
+      <div class="overlay-text" id="overlay-text">데이터 수집 중...</div>
+    </div>
+    <div class="legend">
+      <div class="legend-title">소스</div>
+      <div class="legend-row">
+        <div class="legend-dot" style="background:#58a6ff"></div>뉴스
+      </div>
+      <div class="legend-row">
+        <div class="legend-dot" style="background:#3fb950"></div>블로그
+      </div>
+      <div class="legend-row">
+        <div class="legend-dot" style="background:#f78166"></div>카페
+      </div>
+    </div>
+  </div>
+
+  <!-- 네이버 지도 SDK -->
+  <script>
+    // ⚠️ YOUR_NAVER_CLIENT_ID 를 실제 클라이언트 ID로 교체하세요
+    const NAVER_MAP_CLIENT_ID = 'r3psfiay4o';
+  </script>
+  <script type="text/javascript"
+    src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=r3psfiay4o&submodules=geocoder">
+    </script>
+
+  <script>
+    // ─────────────────────────────────────────────
+    // 상태
+    // ─────────────────────────────────────────────
+    let map, infoWindow;
+    let allItems = [];   // { source, title, desc, link, date, place, lat, lng }
+    let markers = [];
+    let activeFilters = new Set(['news', 'blog', 'cafe']);
+    let totalMapped = 0;
+
+    // 소스별 마커 색상
+    const SOURCE_COLOR = {
+      news: '#58a6ff',
+      blog: '#3fb950',
+      cafe: '#f78166',
+    };
+    const SOURCE_LABEL = { news: '뉴스', blog: '블로그', cafe: '카페' };
+
+    // ─────────────────────────────────────────────
+    // 지도 초기화
+    // ─────────────────────────────────────────────
+    function initMap() {
+      map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(37.1996, 126.8312),
+        zoom: 12,
+        mapTypeId: naver.maps.MapTypeId.NORMAL,
+        mapDataControl: false,
+      });
+      infoWindow = new naver.maps.InfoWindow({ anchorSkew: true });
+      setStatus('준비');
+    }
+
+    window.onload = initMap;
+
+    // ─────────────────────────────────────────────
+    // 필터 토글
+    // ─────────────────────────────────────────────
+    function toggleFilter(el) {
+      const type = el.dataset.type;
+      if (activeFilters.has(type)) {
+        if (activeFilters.size === 1) return; // 최소 1개
+        activeFilters.delete(type);
+        el.classList.remove('active');
+      } else {
+        activeFilters.add(type);
+        el.classList.add('active');
+      }
+      renderMarkers();
+      renderFeed();
+    }
+
+    // ─────────────────────────────────────────────
+    // 검색 시작
+    // ─────────────────────────────────────────────
+    async function startSearch() {
+      const query = document.getElementById('query-input').value.trim() || '화성시';
+      const btn = document.getElementById('search-btn');
+      btn.disabled = true;
+      btn.textContent = '수집 중...';
+      allItems = [];
+      totalMapped = 0;
+      clearMarkers();
+      document.getElementById('feed').innerHTML = '';
+      updateStats();
+      showOverlay('데이터 수집 중...');
+      setProgress(0, '소스별 데이터 수집 중...');
+
+      const types = [...activeFilters];
+      const DISPLAY = 15;
+
+      try {
+        // 1. 소스별 검색 API 호출
+        const results = await Promise.all(
+          types.map(t => fetchSearch(t, query, DISPLAY))
+        );
+
+        const rawItems = [];
+        types.forEach((type, i) => {
+          (results[i]?.items || []).forEach(it => {
+            rawItems.push({
+              source: type,
+              title: stripTags(it.title),
+              desc: stripTags(it.description),
+              link: it.link || it.originallink,
+              date: it.pubDate || it.postdate || '',
+            });
+          });
+        });
+
+        setProgress(40, `${rawItems.length}개 항목 수집 완료 — 위치 추출 중...`);
+        showOverlay('AI 위치 추출 중...');
+
+        // 2. Claude로 장소 추출
+        const batchSize = 10;
+        for (let i = 0; i < rawItems.length; i += batchSize) {
+          const batch = rawItems.slice(i, i + batchSize);
+          const locs = await fetchExtract(batch);
+
+          locs.forEach(loc => {
+            const item = rawItems[i + loc.index];
+            if (!item) return;
+            item.place = loc.place;
+            item.lat = loc.lat;
+            item.lng = loc.lng;
+            allItems.push(item);
+            if (loc.lat && loc.lng) totalMapped++;
+          });
+
+          const pct = 40 + Math.round(((i + batchSize) / rawItems.length) * 55);
+          setProgress(Math.min(pct, 95), `위치 매핑 중... ${totalMapped}개 완료`);
+        }
+
+        setProgress(100, `완료 — ${allItems.length}개 수집, ${totalMapped}개 위치 매핑`);
+        hideOverlay();
+        renderMarkers();
+        renderFeed();
+        updateStats();
+        setStatus('실시간');
+      } catch (err) {
+        hideOverlay();
+        setProgress(0, `오류: ${err.message}`);
+        setStatus('오류');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '수집 시작';
+    }
+
+    // ─────────────────────────────────────────────
+    // API 호출
+    // ─────────────────────────────────────────────
+    async function fetchSearch(type, query, display) {
+      const res = await fetch(`/api/search?type=${type}&query=${encodeURIComponent(query)}&display=${display}`);
+      return res.json();
+    }
+
+    async function fetchExtract(items) {
+      const res = await fetch('/api/extract', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      });
+      const data = await res.json();
+      return data.locations || [];
+    }
+
+    // ─────────────────────────────────────────────
+    // 마커 렌더링
+    // ─────────────────────────────────────────────
+    function clearMarkers() {
+      markers.forEach(m => m.setMap(null));
+      markers = [];
+    }
+
+    function renderMarkers() {
+      clearMarkers();
+      allItems
+        .filter(it => activeFilters.has(it.source) && it.lat && it.lng)
+        .forEach((item, i) => {
+          const pos = new naver.maps.LatLng(item.lat, item.lng);
+          const color = SOURCE_COLOR[item.source];
+
+          const marker = new naver.maps.Marker({
+            position: pos,
+            map,
+            icon: {
+              content: `
+            <div style="
+              width:14px; height:14px; border-radius:50%;
+              background:${color}; border:2px solid rgba(255,255,255,0.3);
+              box-shadow:0 0 8px ${color}66;
+            "></div>`,
+              anchor: new naver.maps.Point(7, 7),
+            },
+          });
+
+          naver.maps.Event.addListener(marker, 'click', () => {
+            const html = `
+          <div class="info-wrap">
+            <div class="info-source source-${item.source}">
+              <span class="source-tag source-${item.source}">${SOURCE_LABEL[item.source]}</span>
+            </div>
+            <div class="info-title">${item.title}</div>
+            ${item.place ? `<div class="info-place">📍 ${item.place}</div>` : ''}
+            <div class="info-desc">${item.desc}</div>
+            <a class="info-link" href="${item.link}" target="_blank">원문 보기 →</a>
+          </div>`;
+            infoWindow.setContent(html);
+            infoWindow.open(map, marker);
+            highlightFeedItem(i);
+          });
+
+          markers.push(marker);
+        });
+    }
+
+    // ─────────────────────────────────────────────
+    // 피드 렌더링
+    // ─────────────────────────────────────────────
+    function renderFeed() {
+      const feed = document.getElementById('feed');
+      const visible = allItems.filter(it => activeFilters.has(it.source));
+      feed.innerHTML = visible.map((item, i) => `
+    <div class="feed-item" id="feed-item-${i}" onclick="focusItem(${i})">
+      <div class="feed-meta">
+        <span class="source-tag source-${item.source}">${SOURCE_LABEL[item.source]}</span>
+        <span class="feed-date">${formatDate(item.date)}</span>
+      </div>
+      <div class="feed-title">${item.title}</div>
+      <div class="feed-place">${item.place ? `📍 <span>${item.place}</span>` : '<span style="color:#8b949e">위치 미확인</span>'}</div>
+    </div>
+  `).join('');
+    }
+
+    function focusItem(idx) {
+      const item = allItems.filter(it => activeFilters.has(it.source))[idx];
+      if (!item?.lat) return;
+      map.setCenter(new naver.maps.LatLng(item.lat, item.lng));
+      map.setZoom(15);
+      markers[idx]?.trigger('click');
+    }
+
+    function highlightFeedItem(idx) {
+      document.querySelectorAll('.feed-item').forEach(el => el.classList.remove('highlighted'));
+      const el = document.getElementById(`feed-item-${idx}`);
+      if (el) { el.classList.add('highlighted'); el.scrollIntoView({ block: 'nearest' }); }
+    }
+
+    // ─────────────────────────────────────────────
+    // 통계 업데이트
+    // ─────────────────────────────────────────────
+    function updateStats() {
+      const visible = allItems.filter(it => activeFilters.has(it.source));
+      document.getElementById('stat-total').textContent = visible.length;
+      document.getElementById('stat-mapped').textContent = visible.filter(it => it.lat).length;
+      document.getElementById('stat-sources').textContent = activeFilters.size;
+    }
+
+    // ─────────────────────────────────────────────
+    // 헬퍼
+    // ─────────────────────────────────────────────
+    function stripTags(str = '') { return str.replace(/<[^>]+>/g, ''); }
+
+    function formatDate(str = '') {
+      if (!str) return '';
+      const d = new Date(str.length === 8
+        ? `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`
+        : str);
+      if (isNaN(d)) return str.slice(0, 10);
+      return `${d.getMonth() + 1}/${d.getDate()}`;
+    }
+
+    function setProgress(pct, text) {
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-text').textContent = text;
+    }
+
+    function showOverlay(text) {
+      document.getElementById('overlay-text').textContent = text;
+      document.getElementById('map-overlay').classList.add('active');
+    }
+
+    function hideOverlay() {
+      document.getElementById('map-overlay').classList.remove('active');
+    }
+
+    function setStatus(state) {
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      text.textContent = state;
+      dot.style.background = state === '실시간' ? '#3fb950'
+        : state === '오류' ? '#f78166' : '#8b949e';
+      dot.style.boxShadow = state === '실시간' ? '0 0 6px #3fb95088' : 'none';
+    }
+  </script>
+</body>
+
+</html>
