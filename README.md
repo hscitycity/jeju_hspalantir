@@ -26,6 +26,24 @@
 
 ## 팔란티어의 우수사례에서 배운다
 
+→ 상세 분석 문서: [팔란티어 시스템 분석 — 화성시 적용 전략](docs/palantir-analysis.html)
+
+### 팔란티어 4대 플랫폼 — 화성시 적용 가능성
+
+![팔란티어 4대 플랫폼](docs/preview-01-platforms.png)
+
+### 팔란티어 VS 화성형 — 핵심 차이
+
+![팔란티어 vs 화성형 비교](docs/preview-02-comparison.png)
+
+### 도입 필수 요소
+
+![도입 필수 요소](docs/preview-03-requirements.png)
+
+### 단계별 구축 로드맵
+
+![단계별 구축 로드맵](docs/preview-04-roadmap.png)
+
 팔란티어(Palantir Technologies)는 2003년 미국에서 설립된 데이터 분석 플랫폼 기업이다. CIA, FBI, 미 국방부를 시작으로 현재는 영국 NHS, 우크라이나 국방부, 여러 지방정부에 이르기까지 복잡한 다중 출처 데이터를 통합하여 의사결정을 지원하는 시스템을 구축해왔다.
 
 팔란티어의 4대 플랫폼과 화성형 시스템의 대응 관계는 아래와 같다.
