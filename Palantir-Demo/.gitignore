@@ -1,0 +1,9 @@
+.vercel
+.claude
+.omo
+node_modules
+.env
+.env.local
+.env.*.local
+!.env.example
+.DS_Store
