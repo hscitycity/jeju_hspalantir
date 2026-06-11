@@ -106,7 +106,7 @@
 
 ```
 좌표 (위경도)  및  국가기초구역 (우편번호 5자리)
-<img width="1166" height="613" alt="image" src="https://github.com/user-attachments/assets/087e4380-f1f6-4633-9e56-6e4ee704fe12" />
+!(docs/space.png)
 
 ```
 
