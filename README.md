@@ -20,7 +20,7 @@
 
 ### 온톨로지란 무엇인가
 
-![온톨로지 정의](docs/onto-01-definition.png)
+![온톨로지 정의](Palantir-Demo/docs/onto-01-definition.png)
 
 온톨로지(Ontology)란 서로 다른 출처의 데이터를 공통된 개념 체계로 연결하는 기술이다. Studer et al.(1998)의 학술 표준 정의에 따르면 온톨로지는 "형식적이고 명시적인, 공유된 개념화의 명세(a formal, explicit specification of a shared conceptualization)"다.
 
