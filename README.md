@@ -1,6 +1,6 @@
 # 화성형 팔란티어 시스템 (Hwaseong Palantir System)
 
-"흩어진 도시 데이터를 하나의 언어로 연결한다"
+**"흩어진 도시 데이터를 하나의 언어로 연결한다"**
 
 ![샘플](Palantir-Demo/docs/sample.png)
 ---
