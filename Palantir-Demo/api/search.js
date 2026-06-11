@@ -5,6 +5,7 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   const { type = 'news', query = '화성시', display = 10 } = req.query;
 
@@ -27,6 +28,12 @@ export default async function handler(req, res) {
         },
       }
     );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: errorText || 'Naver API error' });
+    }
+
     const data = await response.json();
     res.status(200).json(data);
   } catch (err) {

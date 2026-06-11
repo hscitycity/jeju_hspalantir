@@ -44,6 +44,11 @@ ${text}`;
       }),
     });
 
+    if (!response.ok) {
+      const errorText = await response.text();
+      return res.status(response.status).json({ error: errorText || 'Anthropic API error' });
+    }
+
     const data = await response.json();
     const raw = data.content?.[0]?.text || '[]';
 
