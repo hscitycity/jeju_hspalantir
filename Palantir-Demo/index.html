@@ -12,13 +12,31 @@
       padding: 0;
     }
 
-    body {
-      font-family: 'Pretendard', -apple-system, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --line: #21262d;
+      --line-strong: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --brand: #58a6ff;
+      --brand-strong: #1f6feb;
+      --news: #58a6ff;
+      --blog: #3fb950;
+      --cafe: #f78166;
+      --minwon: #f0b429;
+      --inprogress: #e06c00;
+      --done: #3fb950;
+      --danger: #f85149;
     }
 
-    /* ── 헤더 ── */
+    body {
+      font-family: 'Pretendard', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
     .header {
       position: fixed;
       top: 0;
@@ -28,7 +46,7 @@
       height: 52px;
       background: rgba(13, 17, 23, 0.92);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid #21262d;
+      border-bottom: 1px solid var(--line);
       display: flex;
       align-items: center;
       gap: 16px;
@@ -38,7 +56,7 @@
     .header-title {
       font-size: 15px;
       font-weight: 600;
-      color: #58a6ff;
+      color: var(--brand);
       letter-spacing: -0.02em;
     }
 
@@ -47,8 +65,8 @@
       padding: 2px 7px;
       border-radius: 20px;
       background: #161b22;
-      border: 1px solid #30363d;
-      color: #8b949e;
+      border: 1px solid var(--line-strong);
+      color: var(--muted);
     }
 
     .header-right {
@@ -68,81 +86,90 @@
 
     .status-text {
       font-size: 12px;
-      color: #8b949e;
+      color: var(--muted);
     }
 
-    /* ── 사이드패널 ── */
-    .sidebar {
+    .layout {
       position: fixed;
       top: 52px;
       left: 0;
+      right: 0;
       bottom: 0;
-      z-index: 900;
-      width: 340px;
-      background: #161b22;
-      border-right: 1px solid #21262d;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr) 320px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      min-height: 0;
     }
 
-    .sidebar-section {
+    .panel-right {
+      border-right: 0;
+      border-left: 1px solid var(--line);
+    }
+
+    .panel-header {
       padding: 14px 16px;
-      border-bottom: 1px solid #21262d;
+      border-bottom: 1px solid var(--line);
     }
 
-    .sidebar-section h3 {
-      font-size: 11px;
+    .panel-header h3 {
+      font-size: 12px;
       font-weight: 600;
-      color: #8b949e;
+      color: var(--muted);
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    /* 검색 */
-    .search-row {
-      display: flex;
-      gap: 8px;
       margin-bottom: 8px;
     }
 
-    .search-input {
-      flex: 1;
+    .search-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input,
+    .btn {
       height: 34px;
-      background: #0d1117;
-      border: 1px solid #30363d;
       border-radius: 6px;
-      color: #e6edf3;
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
+      color: var(--text);
       font-size: 13px;
+    }
+
+    .input {
+      flex: 1;
       padding: 0 10px;
       outline: none;
     }
 
-    .search-input:focus {
-      border-color: #58a6ff;
+    .input:focus {
+      border-color: var(--brand);
     }
 
     .btn {
-      height: 34px;
-      padding: 0 14px;
-      border-radius: 6px;
-      border: 1px solid #30363d;
+      padding: 0 12px;
       background: #21262d;
-      color: #e6edf3;
-      font-size: 12px;
       cursor: pointer;
       white-space: nowrap;
-      transition: background 0.15s;
     }
 
     .btn:hover {
       background: #30363d;
     }
 
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .btn-primary {
-      background: #1f6feb;
-      border-color: #1f6feb;
+      background: var(--brand-strong);
+      border-color: var(--brand-strong);
       color: #fff;
     }
 
@@ -150,101 +177,185 @@
       background: #388bfd;
     }
 
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
     }
 
-    /* 소스 필터 */
-    .filter-row {
+    .tab-btn {
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      color: var(--text);
+      border-color: currentColor;
+    }
+
+    .tab-btn[data-source="minwon"].active {
+      color: var(--minwon);
+    }
+
+    .tab-btn[data-source="news"].active {
+      color: var(--news);
+    }
+
+    .tab-btn[data-source="blog"].active {
+      color: var(--blog);
+    }
+
+    .tab-btn[data-source="cafe"].active {
+      color: var(--cafe);
+    }
+
+    .source-pane {
+      display: none;
+      flex-direction: column;
+      min-height: 0;
+      flex: 1;
+    }
+
+    .source-pane.active {
       display: flex;
+    }
+
+    .source-toolbar {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .source-feed {
+      overflow-y: auto;
+      min-height: 0;
+      flex: 1;
+      padding: 8px 0;
+    }
+
+    .source-feed::-webkit-scrollbar,
+    .chat-history::-webkit-scrollbar,
+    .failed-body::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .source-feed::-webkit-scrollbar-thumb,
+    .chat-history::-webkit-scrollbar-thumb,
+    .failed-body::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 2px;
+    }
+
+    .dropzone {
+      border: 1px dashed #4d5968;
+      border-radius: 8px;
+      padding: 14px;
+      background: #0f141b;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+
+    .dropzone.active {
+      border-color: var(--minwon);
+      background: #1d1b12;
+    }
+
+    .dropzone-title {
+      font-size: 12px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .dropzone-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .stat-card {
+      border: 1px solid var(--line);
+      background: #0d1117;
+      border-radius: 8px;
+      padding: 8px 9px;
+    }
+
+    .stat-card .label {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .stat-card .value {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .value.warn {
+      color: var(--inprogress);
+    }
+
+    .value.pending {
+      color: var(--minwon);
+    }
+
+    .value.danger {
+      color: var(--danger);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
       gap: 6px;
     }
 
     .filter-chip {
-      flex: 1;
       height: 28px;
-      border-radius: 20px;
-      border: 1px solid #30363d;
-      background: #0d1117;
-      color: #8b949e;
+      border-radius: 16px;
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
+      color: var(--muted);
       font-size: 11px;
+      padding: 0 10px;
       cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
     }
 
     .filter-chip.active {
-      border-color: currentColor;
-      background: #161b22;
+      border-color: var(--minwon);
+      color: var(--minwon);
+      background: #201b0c;
     }
 
-    .filter-chip.news.active {
-      color: #58a6ff;
-    }
-
-    .filter-chip.blog.active {
-      color: #3fb950;
-    }
-
-    .filter-chip.cafe.active {
-      color: #f78166;
-    }
-
-    /* 통계 */
-    .stat-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .stat {
-      flex: 1;
-      background: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 6px;
-      padding: 8px 10px;
-    }
-
-    .stat-val {
-      font-size: 18px;
-      font-weight: 600;
-      color: #e6edf3;
-    }
-
-    .stat-label {
-      font-size: 10px;
-      color: #8b949e;
-      margin-top: 2px;
-    }
-
-    /* 피드 */
-    .feed {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 0;
-    }
-
-    .feed::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .feed::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .feed::-webkit-scrollbar-thumb {
-      background: #30363d;
-      border-radius: 2px;
+    .geo-progress {
+      font-size: 11px;
+      color: var(--muted);
     }
 
     .feed-item {
-      padding: 10px 16px;
-      border-bottom: 1px solid #21262d;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
       cursor: pointer;
-      transition: background 0.1s;
     }
 
     .feed-item:hover {
@@ -259,40 +370,58 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
     }
 
-    .source-tag {
+    .source-tag,
+    .status-badge {
       font-size: 10px;
-      padding: 1px 7px;
-      border-radius: 20px;
-      font-weight: 500;
       border: 1px solid currentColor;
+      border-radius: 999px;
+      padding: 1px 7px;
+      font-weight: 500;
+    }
+
+    .source-minwon {
+      color: var(--minwon);
     }
 
     .source-news {
-      color: #58a6ff;
+      color: var(--news);
     }
 
     .source-blog {
-      color: #3fb950;
+      color: var(--blog);
     }
 
     .source-cafe {
-      color: #f78166;
+      color: var(--cafe);
+    }
+
+    .status-부서지정 {
+      color: var(--minwon);
+    }
+
+    .status-처리중 {
+      color: var(--inprogress);
+    }
+
+    .status-완료 {
+      color: var(--done);
     }
 
     .feed-date {
-      font-size: 10px;
-      color: #8b949e;
       margin-left: auto;
+      font-size: 10px;
+      color: var(--muted);
     }
 
     .feed-title {
       font-size: 13px;
-      color: #e6edf3;
-      line-height: 1.4;
-      margin-bottom: 3px;
+      line-height: 1.45;
+      margin-bottom: 4px;
+      color: var(--text);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -301,110 +430,111 @@
 
     .feed-place {
       font-size: 11px;
-      color: #8b949e;
+      color: var(--muted);
     }
 
     .feed-place span {
-      color: #58a6ff;
+      color: var(--brand);
     }
 
-    /* 진행 */
-    .progress-bar {
-      height: 2px;
-      background: #21262d;
-      margin: 0 16px 10px;
-      border-radius: 1px;
-      overflow: hidden;
+    .empty {
+      padding: 18px 14px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
-    .progress-fill {
-      height: 100%;
-      background: #1f6feb;
-      border-radius: 1px;
-      transition: width 0.3s;
-      width: 0%;
+    .failed-wrap {
+      border-top: 1px solid var(--line);
+      max-height: 260px;
+      display: flex;
+      flex-direction: column;
     }
 
-    .progress-text {
-      font-size: 11px;
-      color: #8b949e;
-      padding: 0 16px 8px;
+    .failed-toggle {
+      height: 34px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      background: #141a22;
+      color: var(--danger);
+      text-align: left;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
     }
 
-    /* ── 지도 ── */
-    #map {
-      position: fixed;
-      top: 52px;
-      left: 340px;
-      right: 0;
-      bottom: 0;
+    .failed-body {
+      display: none;
+      overflow-y: auto;
+      padding: 8px 10px;
+      gap: 8px;
+      flex-direction: column;
     }
 
-    /* 인포윈도우 커스텀 */
-    .info-wrap {
-      background: #161b22;
-      border: 1px solid #30363d;
+    .failed-wrap.open .failed-body {
+      display: flex;
+    }
+
+    .failed-item {
+      border: 1px solid #3f2525;
+      background: #211317;
       border-radius: 8px;
-      padding: 12px 14px;
-      min-width: 220px;
-      max-width: 280px;
-      font-family: 'Pretendard', sans-serif;
+      padding: 8px;
     }
 
-    .info-source {
-      font-size: 10px;
+    .failed-item-head {
+      font-size: 11px;
+      color: #ffb3b3;
+      margin-bottom: 4px;
+    }
+
+    .failed-item-desc {
+      font-size: 11px;
+      color: #d6dbe2;
+      line-height: 1.4;
       margin-bottom: 6px;
     }
 
-    .info-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #e6edf3;
-      margin-bottom: 4px;
-      line-height: 1.4;
+    .failed-actions {
+      display: flex;
+      gap: 6px;
     }
 
-    .info-place {
-      font-size: 11px;
-      color: #58a6ff;
-      margin-bottom: 8px;
+    .failed-actions .input {
+      height: 30px;
+      font-size: 12px;
     }
 
-    .info-desc {
-      font-size: 11px;
-      color: #8b949e;
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    .failed-actions .btn {
+      height: 30px;
+      font-size: 12px;
+      padding: 0 10px;
     }
 
-    .info-link {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 11px;
-      color: #388bfd;
-      text-decoration: none;
+    .map-wrap {
+      position: relative;
+      min-width: 0;
+      background: var(--bg);
     }
 
-    /* 로딩 오버레이 */
+    #map {
+      position: absolute;
+      inset: 0;
+    }
+
     .map-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: 10px;
       background: rgba(13, 17, 23, 0.7);
-      z-index: 100;
-      gap: 12px;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity .25s;
+      z-index: 50;
     }
 
     .map-overlay.active {
@@ -413,12 +543,12 @@
     }
 
     .spinner {
-      width: 36px;
-      height: 36px;
-      border: 2px solid #30363d;
-      border-top-color: #58a6ff;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      border: 2px solid var(--line-strong);
+      border-top-color: var(--brand);
+      animation: spin .8s linear infinite;
     }
 
     @keyframes spin {
@@ -427,52 +557,173 @@
       }
     }
 
-    .overlay-text {
-      font-size: 13px;
-      color: #8b949e;
-    }
-
-    /* 범례 */
     .legend {
       position: absolute;
-      bottom: 24px;
-      right: 16px;
-      z-index: 200;
-      background: rgba(22, 27, 34, 0.92);
-      border: 1px solid #30363d;
+      right: 14px;
+      bottom: 14px;
+      z-index: 60;
+      border: 1px solid var(--line-strong);
       border-radius: 8px;
-      padding: 10px 14px;
+      background: rgba(22, 27, 34, 0.92);
+      padding: 10px 12px;
       backdrop-filter: blur(8px);
     }
 
     .legend-title {
       font-size: 10px;
-      color: #8b949e;
-      margin-bottom: 8px;
-      letter-spacing: 0.06em;
+      color: var(--muted);
       text-transform: uppercase;
+      margin-bottom: 7px;
+      letter-spacing: 0.06em;
     }
 
     .legend-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 5px;
       font-size: 12px;
+      margin-bottom: 5px;
     }
 
     .legend-dot {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      flex-shrink: 0;
+    }
+
+    .chat-history {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      max-width: 100%;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border: 1px solid var(--line);
+    }
+
+    .msg.user {
+      background: #1f6feb1f;
+      border-color: #1f6feb66;
+      align-self: flex-end;
+    }
+
+    .msg.assistant {
+      background: #0d1117;
+      align-self: flex-start;
+    }
+
+    .quick-questions {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .quick-btn {
+      border: 1px solid var(--line-strong);
+      background: var(--bg);
+      color: var(--muted);
+      border-radius: 999px;
+      font-size: 11px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .quick-btn:hover {
+      color: var(--text);
+      border-color: var(--brand);
+    }
+
+    .chat-input-wrap {
+      padding: 10px 12px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .info-wrap {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-width: 230px;
+      max-width: 320px;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    .info-meta-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .info-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+
+    .info-desc {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 6px;
+      white-space: pre-wrap;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 4px;
+      font-size: 11px;
+      color: #c3ccd7;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(12, 16, 22, 0.95);
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      padding: 9px 14px;
+      opacity: 0;
+      z-index: 1200;
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
   </style>
 </head>
 
 <body>
-
-  <!-- 헤더 -->
   <header class="header">
     <div class="header-title">화성형 팔란티어 시스템</div>
     <span class="header-badge">Beta v0.1</span>
@@ -482,213 +733,709 @@
     </div>
   </header>
 
-  <!-- 사이드바 -->
-  <aside class="sidebar">
-
-    <!-- 검색 -->
-    <div class="sidebar-section">
-      <h3>키워드 검색</h3>
-      <div class="search-row">
-        <input id="query-input" class="search-input" type="text" value="화성시" placeholder="검색어 입력..." />
-        <button class="btn btn-primary" id="search-btn" onclick="startSearch()">수집 시작</button>
-      </div>
-      <div class="filter-row">
-        <div class="filter-chip news active" data-type="news" onclick="toggleFilter(this)">📰 뉴스</div>
-        <div class="filter-chip blog active" data-type="blog" onclick="toggleFilter(this)">📝 블로그</div>
-        <div class="filter-chip cafe active" data-type="cafe" onclick="toggleFilter(this)">☕ 카페</div>
-      </div>
-    </div>
-
-    <!-- 통계 -->
-    <div class="sidebar-section">
-      <div class="stat-row">
-        <div class="stat">
-          <div class="stat-val" id="stat-total">0</div>
-          <div class="stat-label">총 항목</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="stat-mapped">0</div>
-          <div class="stat-label">위치 매핑</div>
-        </div>
-        <div class="stat">
-          <div class="stat-val" id="stat-sources">0</div>
-          <div class="stat-label">소스</div>
+  <main class="layout">
+    <aside class="panel panel-left">
+      <div class="panel-header">
+        <h3>데이터 소스</h3>
+        <div class="search-row">
+          <input id="query-input" class="input" type="text" value="화성시" placeholder="검색어 입력" />
         </div>
       </div>
-    </div>
 
-    <!-- 진행바 -->
-    <div class="progress-bar">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-    <div class="progress-text" id="progress-text"></div>
-
-    <!-- 피드 -->
-    <div class="feed" id="feed"></div>
-  </aside>
-
-  <!-- 지도 -->
-  <div id="map">
-    <div class="map-overlay" id="map-overlay">
-      <div class="spinner"></div>
-      <div class="overlay-text" id="overlay-text">데이터 수집 중...</div>
-    </div>
-    <div class="legend">
-      <div class="legend-title">소스</div>
-      <div class="legend-row">
-        <div class="legend-dot" style="background:#58a6ff"></div>뉴스
+      <div class="tabs">
+        <button class="tab-btn" data-source="minwon" onclick="switchSource('minwon')">민원</button>
+        <button class="tab-btn active" data-source="news" onclick="switchSource('news')">뉴스</button>
+        <button class="tab-btn" data-source="blog" onclick="switchSource('blog')">블로그</button>
+        <button class="tab-btn" data-source="cafe" onclick="switchSource('cafe')">카페</button>
       </div>
-      <div class="legend-row">
-        <div class="legend-dot" style="background:#3fb950"></div>블로그
-      </div>
-      <div class="legend-row">
-        <div class="legend-dot" style="background:#f78166"></div>카페
-      </div>
-    </div>
-  </div>
 
-  <!-- 네이버 지도 SDK -->
+      <section class="source-pane" id="pane-minwon">
+        <div class="source-toolbar">
+          <input id="minwon-file" type="file" accept=".csv,text/csv" style="display:none" onchange="handleComplaintFileSelect(event)" />
+          <div id="minwon-dropzone" class="dropzone" onclick="openComplaintFilePicker()">
+            <div class="dropzone-title">CSV 파일 업로드</div>
+            <div class="dropzone-sub">드래그 앤 드롭 또는 클릭 (순번/민원분류/민원내용/발생위치/발생일시/담당부서/처리현황)</div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="label">전체 건수</div>
+              <div id="stat-total" class="value">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">처리중</div>
+              <div id="stat-inprogress" class="value warn">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">부서지정</div>
+              <div id="stat-assigned" class="value pending">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="label">위치 미확인</div>
+              <div id="stat-failed" class="value danger">0</div>
+            </div>
+          </div>
+          <div id="complaint-category-filters" class="chip-row"></div>
+          <div id="geo-progress" class="geo-progress">민원 CSV를 업로드하면 지오코딩을 시작합니다.</div>
+        </div>
+        <div class="source-feed" id="feed-minwon"></div>
+        <div id="failed-wrap" class="failed-wrap">
+          <button id="failed-toggle" class="failed-toggle" onclick="toggleFailedPanel()">⚠️ 위치 미확인 0건</button>
+          <div id="failed-body" class="failed-body"></div>
+        </div>
+      </section>
+
+      <section class="source-pane active" id="pane-news">
+        <div class="source-toolbar">
+          <button class="btn btn-primary" id="btn-news" onclick="collectWebSource('news')">뉴스 수집</button>
+          <div class="hint">네이버 뉴스 검색 API + Claude 장소 추출로 지도 매핑</div>
+        </div>
+        <div class="source-feed" id="feed-news"></div>
+      </section>
+
+      <section class="source-pane" id="pane-blog">
+        <div class="source-toolbar">
+          <button class="btn btn-primary" id="btn-blog" onclick="collectWebSource('blog')">블로그 수집</button>
+          <div class="hint">네이버 블로그 검색 API + Claude 장소 추출로 지도 매핑</div>
+        </div>
+        <div class="source-feed" id="feed-blog"></div>
+      </section>
+
+      <section class="source-pane" id="pane-cafe">
+        <div class="source-toolbar">
+          <button class="btn btn-primary" id="btn-cafe" onclick="collectWebSource('cafe')">카페 수집</button>
+          <div class="hint">네이버 카페 검색 API + Claude 장소 추출로 지도 매핑</div>
+        </div>
+        <div class="source-feed" id="feed-cafe"></div>
+      </section>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
+      <div class="map-overlay" id="map-overlay">
+        <div class="spinner"></div>
+        <div class="hint" id="overlay-text">처리 중...</div>
+      </div>
+      <div class="legend">
+        <div class="legend-title">소스</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#f0b429"></span>민원(부서지정)</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#e06c00"></span>민원(처리중)</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#3fb950"></span>민원(완료)</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#58a6ff"></span>뉴스</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#3fb950"></span>블로그</div>
+        <div class="legend-row"><span class="legend-dot" style="background:#f78166"></span>카페</div>
+      </div>
+    </section>
+
+    <aside class="panel panel-right">
+      <div class="panel-header">
+        <h3>AI 분석 에이전트</h3>
+      </div>
+      <div class="chat-history" id="chat-history"></div>
+      <div class="quick-questions">
+        <button class="quick-btn" onclick="askQuick('현재 주요 민원은?')">현재 주요 민원은?</button>
+        <button class="quick-btn" onclick="askQuick('최신 지역 이슈 요약')">최신 지역 이슈 요약</button>
+        <button class="quick-btn" onclick="askQuick('화성시 핫스팟 분석')">화성시 핫스팟 분석</button>
+      </div>
+      <div class="chat-input-wrap">
+        <input id="chat-input" class="input chat-input" type="text" placeholder="질문을 입력하세요" />
+        <button class="btn btn-primary" id="chat-send" onclick="sendChat()">전송</button>
+      </div>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script>
-    // ⚠️ YOUR_NAVER_CLIENT_ID 를 실제 클라이언트 ID로 교체하세요
     const NAVER_MAP_CLIENT_ID = 'r3psfiay4o';
   </script>
-  <script type="text/javascript"
-    src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=r3psfiay4o&submodules=geocoder">
-    </script>
-
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=r3psfiay4o&submodules=geocoder"></script>
   <script>
-    // ─────────────────────────────────────────────
-    // 상태
-    // ─────────────────────────────────────────────
-    let map, infoWindow;
-    let allItems = [];   // { source, title, desc, link, date, place, lat, lng }
-    let markers = [];
-    let activeFilters = new Set(['news', 'blog', 'cafe']);
-    let totalMapped = 0;
-
-    // 소스별 마커 색상
-    const SOURCE_COLOR = {
-      news: '#58a6ff',
-      blog: '#3fb950',
-      cafe: '#f78166',
+    const SOURCE_META = {
+      minwon: { label: '민원', color: '#f0b429' },
+      news: { label: '뉴스', color: '#58a6ff' },
+      blog: { label: '블로그', color: '#3fb950' },
+      cafe: { label: '카페', color: '#f78166' },
     };
-    const SOURCE_LABEL = { news: '뉴스', blog: '블로그', cafe: '카페' };
 
-    // ─────────────────────────────────────────────
-    // 지도 초기화
-    // ─────────────────────────────────────────────
+    const COMPLAINT_STATUS_COLOR = {
+      부서지정: '#f0b429',
+      처리중: '#e06c00',
+      완료: '#3fb950',
+    };
+
+    const HWASEONG_BOUNDARY = [
+      [37.355, 126.774], [37.334, 126.9], [37.31, 127.022], [37.24, 127.09],
+      [37.158, 127.103], [37.07, 127.022], [37.045, 126.915], [37.06, 126.79],
+      [37.12, 126.715], [37.19, 126.69], [37.28, 126.705], [37.335, 126.74]
+    ];
+
+    let map;
+    let infoWindow;
+    let activeSource = 'news';
+    const sourceItems = { minwon: [], news: [], blog: [], cafe: [] };
+    const markersBySource = { news: [], blog: [], cafe: [] };
+    let complaintMarkers = [];
+    let failedComplaints = [];
+    let complaintStats = { total: 0, assigned: 0, inprogress: 0, failed: 0 };
+    let complaintCategoryFilter = new Set();
+    let failedExpanded = false;
+    const chatMessages = [];
+
+    function allItems() {
+      return Object.values(sourceItems).flat();
+    }
+
     function initMap() {
       map = new naver.maps.Map('map', {
         center: new naver.maps.LatLng(37.1996, 126.8312),
-        zoom: 12,
+        zoom: 11,
         mapTypeId: naver.maps.MapTypeId.NORMAL,
         mapDataControl: false,
       });
+
       infoWindow = new naver.maps.InfoWindow({ anchorSkew: true });
+      drawBoundaryPolygons();
+      initDropzone();
+      renderAllFeeds();
+      renderComplaintFilters();
+      renderFailedComplaints();
+      updateComplaintStats();
+      updateMarkerVisibility();
+      appendChat('assistant', '안녕하세요. 화성시 데이터가 수집되면 현안·핫스팟을 분석해드릴게요.');
       setStatus('준비');
     }
 
     window.onload = initMap;
 
-    // ─────────────────────────────────────────────
-    // 필터 토글
-    // ─────────────────────────────────────────────
-    function toggleFilter(el) {
-      const type = el.dataset.type;
-      if (activeFilters.has(type)) {
-        if (activeFilters.size === 1) return; // 최소 1개
-        activeFilters.delete(type);
-        el.classList.remove('active');
-      } else {
-        activeFilters.add(type);
-        el.classList.add('active');
-      }
-      renderMarkers();
-      renderFeed();
+    function drawBoundaryPolygons() {
+      const inner = HWASEONG_BOUNDARY.map(([lat, lng]) => new naver.maps.LatLng(lat, lng));
+      const outer = [
+        new naver.maps.LatLng(33.0, 123.5),
+        new naver.maps.LatLng(39.8, 123.5),
+        new naver.maps.LatLng(39.8, 132.5),
+        new naver.maps.LatLng(33.0, 132.5),
+      ];
+
+      new naver.maps.Polygon({
+        map,
+        paths: [outer, [...inner].reverse()],
+        fillColor: '#0d1117',
+        fillOpacity: 0.55,
+        strokeOpacity: 0,
+        clickable: false,
+        zIndex: 2,
+      });
+
+      new naver.maps.Polygon({
+        map,
+        paths: inner,
+        fillColor: '#1f6feb',
+        fillOpacity: 0.15,
+        strokeColor: '#58a6ff',
+        strokeWeight: 2,
+        clickable: false,
+        zIndex: 3,
+      });
     }
 
-    // ─────────────────────────────────────────────
-    // 검색 시작
-    // ─────────────────────────────────────────────
-    async function startSearch() {
-      const query = document.getElementById('query-input').value.trim() || '화성시';
-      const btn = document.getElementById('search-btn');
-      btn.disabled = true;
-      btn.textContent = '수집 중...';
-      allItems = [];
-      totalMapped = 0;
-      clearMarkers();
-      document.getElementById('feed').innerHTML = '';
-      updateStats();
-      showOverlay('데이터 수집 중...');
-      setProgress(0, '소스별 데이터 수집 중...');
+    function initDropzone() {
+      const dropzone = document.getElementById('minwon-dropzone');
+      ['dragenter', 'dragover'].forEach((evt) => {
+        dropzone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('active');
+        });
+      });
+      ['dragleave', 'drop'].forEach((evt) => {
+        dropzone.addEventListener(evt, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('active');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        const file = e.dataTransfer?.files?.[0];
+        if (file) handleComplaintCsvUpload(file);
+      });
+    }
 
-      const types = [...activeFilters];
-      const DISPLAY = 15;
+    function openComplaintFilePicker() {
+      document.getElementById('minwon-file').click();
+    }
+
+    function handleComplaintFileSelect(event) {
+      const file = event.target.files?.[0];
+      if (file) handleComplaintCsvUpload(file);
+      event.target.value = '';
+    }
+
+    async function handleComplaintCsvUpload(file) {
+      if (!file.name.toLowerCase().endsWith('.csv')) {
+        showToast('CSV 파일만 업로드 가능합니다.');
+        return;
+      }
+
+      setStatus('파싱 중');
+      showOverlay('CSV 파싱 중...');
 
       try {
-        // 1. 소스별 검색 API 호출
-        const results = await Promise.all(
-          types.map(t => fetchSearch(t, query, DISPLAY))
-        );
+        const rows = await parseCsvFile(file);
+        await processComplaintRows(rows);
+      } catch (err) {
+        setStatus('오류');
+        showToast(`민원 CSV 처리 실패: ${err.message}`);
+      } finally {
+        hideOverlay();
+      }
+    }
 
-        const rawItems = [];
-        types.forEach((type, i) => {
-          (results[i]?.items || []).forEach(it => {
-            rawItems.push({
-              source: type,
-              title: stripTags(it.title),
-              desc: stripTags(it.description),
-              link: it.link || it.originallink,
-              date: it.pubDate || it.postdate || '',
-            });
-          });
+    function parseCsvFile(file) {
+      return new Promise((resolve, reject) => {
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: 'greedy',
+          encoding: 'UTF-8',
+          transformHeader: (header) => String(header || '').replace(/^\uFEFF/, '').trim(),
+          complete: (result) => resolve(result.data || []),
+          error: (error) => reject(error),
         });
+      });
+    }
 
-        setProgress(40, `${rawItems.length}개 항목 수집 완료 — 위치 추출 중...`);
-        showOverlay('AI 위치 추출 중...');
+    async function processComplaintRows(rows) {
+      sourceItems.minwon = [];
+      clearComplaintMarkers();
+      failedComplaints = [];
+      complaintStats = { total: 0, assigned: 0, inprogress: 0, failed: 0 };
 
-        // 2. Claude로 장소 추출
+      const complaints = rows
+        .map((row) => normalizeComplaintRow(row))
+        .filter((item) => item.민원내용 || item.발생위치 || item.민원분류);
+
+      complaintStats.total = complaints.length;
+      complaintStats.assigned = complaints.filter((item) => item.처리현황표시 === '부서지정').length;
+      complaintStats.inprogress = complaints.filter((item) => item.처리현황표시 === '처리중').length;
+
+      const categorySet = new Set(complaints.map((item) => item.민원분류 || '미분류'));
+      complaintCategoryFilter = new Set(categorySet);
+      renderComplaintFilters();
+
+      showOverlay('위치 변환 중...');
+      for (let i = 0; i < complaints.length; i += 1) {
+        const item = complaints[i];
+        setGeocodingProgress(`위치 변환 중... ${i + 1}/${complaints.length}`);
+
+        const first = await geocodePlace(item.발생위치);
+        let geo = first;
+        if (!geo) {
+          const fallbackQuery = extractEupMyeonDong(item.발생위치);
+          if (fallbackQuery) geo = await geocodePlace(fallbackQuery);
+        }
+
+        if (geo) {
+          item.lat = geo.lat;
+          item.lng = geo.lng;
+          sourceItems.minwon.push(item);
+        } else {
+          failedComplaints.push(item);
+        }
+
+        await sleep(300);
+      }
+
+      complaintStats.failed = failedComplaints.length;
+      setGeocodingProgress(`위치 변환 완료 ${sourceItems.minwon.length}/${complaintStats.total}`);
+
+      renderComplaintMarkers();
+      renderFailedComplaints();
+      renderAllFeeds();
+      updateComplaintStats();
+      switchSource('minwon');
+      setStatus('실시간');
+
+      showToast(`✅ ${sourceItems.minwon.length}건 지도 표시 완료 | ⚠️ ${failedComplaints.length}건 위치 미확인`);
+    }
+
+    function normalizeComplaintRow(row) {
+      const serial = clean(row['순번']);
+      const category = clean(row['민원분류']) || '미분류';
+      const content = clean(row['민원내용']);
+      const location = clean(row['발생위치']);
+      const datetime = clean(row['발생일시']);
+      const department = clean(row['담당부서']);
+      const rawStatus = clean(row['처리현황']);
+      const displayStatus = mapComplaintStatus(rawStatus);
+
+      return {
+        source: 'minwon',
+        순번: serial,
+        민원분류: category,
+        민원내용: content,
+        발생위치: location,
+        발생일시: datetime,
+        담당부서: department,
+        처리현황원본: rawStatus,
+        처리현황표시: displayStatus,
+        lat: null,
+        lng: null,
+        markerRef: null,
+      };
+    }
+
+    function mapComplaintStatus(raw) {
+      if (raw.includes('접수')) return '부서지정';
+      if (raw.includes('처리중')) return '처리중';
+      if (raw.includes('완료')) return '완료';
+      return '부서지정';
+    }
+
+    async function collectWebSource(type) {
+      const btn = document.getElementById(`btn-${type}`);
+      const query = (document.getElementById('query-input').value || '화성시').trim() || '화성시';
+      btn.disabled = true;
+      setStatus('수집 중');
+      showOverlay(`${SOURCE_META[type].label} 데이터 수집 중...`);
+
+      try {
+        clearWebMarkers(type);
+        const search = await fetchSearch(type, query, 20);
+        const rawItems = (search.items || []).map((it) => ({
+          source: type,
+          title: stripTags(it.title || ''),
+          desc: stripTags(it.description || ''),
+          link: it.link || it.originallink || '',
+          date: it.pubDate || it.postdate || '',
+          place: null,
+          lat: null,
+          lng: null,
+          markerRef: null,
+        }));
+
         const batchSize = 10;
         for (let i = 0; i < rawItems.length; i += batchSize) {
           const batch = rawItems.slice(i, i + batchSize);
-          const locs = await fetchExtract(batch);
-
-          locs.forEach(loc => {
-            const item = rawItems[i + loc.index];
+          const locations = await fetchExtract(batch.map((it) => ({ title: it.title, description: it.desc })));
+          locations.forEach((loc) => {
+            const item = batch[loc.index];
             if (!item) return;
-            item.place = loc.place;
-            item.lat = loc.lat;
-            item.lng = loc.lng;
-            allItems.push(item);
-            if (loc.lat && loc.lng) totalMapped++;
+            item.place = loc.place || null;
+            item.lat = toNumber(loc.lat);
+            item.lng = toNumber(loc.lng);
           });
-
-          const pct = 40 + Math.round(((i + batchSize) / rawItems.length) * 55);
-          setProgress(Math.min(pct, 95), `위치 매핑 중... ${totalMapped}개 완료`);
         }
 
-        setProgress(100, `완료 — ${allItems.length}개 수집, ${totalMapped}개 위치 매핑`);
-        hideOverlay();
-        renderMarkers();
-        renderFeed();
-        updateStats();
+        sourceItems[type] = rawItems;
+        renderWebMarkers(type);
+        renderAllFeeds();
+        updateMarkerVisibility();
         setStatus('실시간');
       } catch (err) {
-        hideOverlay();
-        setProgress(0, `오류: ${err.message}`);
         setStatus('오류');
+        alert(`수집 실패: ${err.message}`);
+      } finally {
+        hideOverlay();
+        btn.disabled = false;
       }
-
-      btn.disabled = false;
-      btn.textContent = '수집 시작';
     }
 
-    // ─────────────────────────────────────────────
-    // API 호출
-    // ─────────────────────────────────────────────
+    function switchSource(source) {
+      activeSource = source;
+      document.querySelectorAll('.tab-btn').forEach((el) => {
+        el.classList.toggle('active', el.dataset.source === source);
+      });
+      document.querySelectorAll('.source-pane').forEach((el) => el.classList.remove('active'));
+      document.getElementById(`pane-${source}`).classList.add('active');
+      updateMarkerVisibility();
+      renderAllFeeds();
+    }
+
+    function updateMarkerVisibility() {
+      ['news', 'blog', 'cafe'].forEach((source) => {
+        markersBySource[source].forEach((marker) => marker.setMap(activeSource === source ? map : null));
+      });
+      complaintMarkers.forEach((marker) => marker.setMap(activeSource === 'minwon' ? map : null));
+    }
+
+    function clearWebMarkers(source) {
+      markersBySource[source].forEach((marker) => marker.setMap(null));
+      markersBySource[source] = [];
+      sourceItems[source].forEach((item) => {
+        item.markerRef = null;
+      });
+    }
+
+    function clearComplaintMarkers() {
+      complaintMarkers.forEach((marker) => marker.setMap(null));
+      complaintMarkers = [];
+      sourceItems.minwon.forEach((item) => {
+        item.markerRef = null;
+      });
+    }
+
+    function renderWebMarkers(source) {
+      clearWebMarkers(source);
+      sourceItems[source]
+        .filter((item) => item.lat && item.lng)
+        .forEach((item, index) => {
+          const color = SOURCE_META[source].color;
+          const marker = new naver.maps.Marker({
+            map: activeSource === source ? map : null,
+            position: new naver.maps.LatLng(item.lat, item.lng),
+            icon: {
+              content: `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,0.3);box-shadow:0 0 8px ${color}66"></div>`,
+              anchor: new naver.maps.Point(7, 7),
+            },
+          });
+
+          naver.maps.Event.addListener(marker, 'click', () => {
+            infoWindow.setContent(webInfoHtml(item));
+            infoWindow.open(map, marker);
+            highlightFeedItem(source, index);
+          });
+
+          item.markerRef = marker;
+          markersBySource[source].push(marker);
+        });
+    }
+
+    function renderComplaintMarkers() {
+      clearComplaintMarkers();
+      const visible = getFilteredComplaintItems();
+      visible.forEach((item, index) => {
+        if (!item.lat || !item.lng) return;
+        const color = COMPLAINT_STATUS_COLOR[item.처리현황표시] || '#f0b429';
+        const marker = new naver.maps.Marker({
+          map: activeSource === 'minwon' ? map : null,
+          position: new naver.maps.LatLng(item.lat, item.lng),
+          icon: {
+            content: `<div style="width:16px;height:16px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,0.4);box-shadow:0 0 8px ${color}88"></div>`,
+            anchor: new naver.maps.Point(8, 8),
+          },
+        });
+
+        naver.maps.Event.addListener(marker, 'click', () => {
+          infoWindow.setContent(complaintInfoHtml(item));
+          infoWindow.open(map, marker);
+          highlightFeedItem('minwon', index);
+        });
+
+        item.markerRef = marker;
+        complaintMarkers.push(marker);
+      });
+      updateMarkerVisibility();
+    }
+
+    function renderAllFeeds() {
+      renderWebFeed('news');
+      renderWebFeed('blog');
+      renderWebFeed('cafe');
+      renderComplaintFeed();
+    }
+
+    function renderWebFeed(source) {
+      const list = sourceItems[source] || [];
+      const feed = document.getElementById(`feed-${source}`);
+      if (!feed) return;
+
+      if (list.length === 0) {
+        feed.innerHTML = `<div class="empty">${SOURCE_META[source].label} 데이터가 없습니다.</div>`;
+        return;
+      }
+
+      feed.innerHTML = list
+        .map((item, i) => `
+          <div class="feed-item" id="feed-${source}-${i}" onclick="focusWebItem('${source}', ${i})">
+            <div class="feed-meta">
+              <span class="source-tag source-${source}">${SOURCE_META[source].label}</span>
+              <span class="feed-date">${escapeHtml(formatDate(item.date))}</span>
+            </div>
+            <div class="feed-title">${escapeHtml(item.title)}</div>
+            <div class="feed-place">${item.place ? `📍 <span>${escapeHtml(item.place)}</span>` : '<span style="color:#8b949e">위치 미확인</span>'}</div>
+          </div>
+        `)
+        .join('');
+    }
+
+    function renderComplaintFeed() {
+      const feed = document.getElementById('feed-minwon');
+      const visible = getFilteredComplaintItems();
+
+      if (visible.length === 0) {
+        feed.innerHTML = '<div class="empty">필터 조건의 민원 데이터가 없습니다.</div>';
+        return;
+      }
+
+      feed.innerHTML = visible
+        .map((item, i) => `
+          <div class="feed-item" id="feed-minwon-${i}" onclick="focusComplaintItem(${i})">
+            <div class="feed-meta">
+              <span class="source-tag source-minwon">${escapeHtml(item.민원분류 || '미분류')}</span>
+              <span class="status-badge status-${item.처리현황표시}">${item.처리현황표시}</span>
+              <span class="feed-date">${escapeHtml(formatDate(item.발생일시))}</span>
+            </div>
+            <div class="feed-title">${escapeHtml(item.민원내용 || '민원내용 없음')}</div>
+            <div class="feed-place">📍 <span>${escapeHtml(getTownFromAddress(item.발생위치 || '-'))}</span></div>
+          </div>
+        `)
+        .join('');
+    }
+
+    function focusWebItem(source, index) {
+      const item = sourceItems[source]?.[index];
+      if (!item?.lat || !item?.lng || !item.markerRef) return;
+      if (activeSource !== source) switchSource(source);
+      map.setCenter(new naver.maps.LatLng(item.lat, item.lng));
+      map.setZoom(14);
+      infoWindow.setContent(webInfoHtml(item));
+      infoWindow.open(map, item.markerRef);
+      highlightFeedItem(source, index);
+    }
+
+    function focusComplaintItem(index) {
+      const item = getFilteredComplaintItems()[index];
+      if (!item?.lat || !item?.lng || !item.markerRef) return;
+      if (activeSource !== 'minwon') switchSource('minwon');
+      map.setCenter(new naver.maps.LatLng(item.lat, item.lng));
+      map.setZoom(14);
+      infoWindow.setContent(complaintInfoHtml(item));
+      infoWindow.open(map, item.markerRef);
+      highlightFeedItem('minwon', index);
+    }
+
+    function highlightFeedItem(source, index) {
+      document.querySelectorAll('.feed-item').forEach((el) => el.classList.remove('highlighted'));
+      const target = document.getElementById(`feed-${source}-${index}`);
+      if (target) {
+        target.classList.add('highlighted');
+        target.scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function renderComplaintFilters() {
+      const container = document.getElementById('complaint-category-filters');
+      const categories = [...new Set(sourceItems.minwon.map((item) => item.민원분류 || '미분류'))].sort();
+      const allActive = complaintCategoryFilter.size === categories.length && categories.length > 0;
+
+      const chips = [`<button class="filter-chip ${allActive ? 'active' : ''}" onclick="toggleComplaintCategoryAll()">전체선택</button>`];
+      categories.forEach((category) => {
+        const active = complaintCategoryFilter.has(category);
+        chips.push(`<button class="filter-chip ${active ? 'active' : ''}" onclick="toggleComplaintCategory('${escapeJs(category)}')">${escapeHtml(category)}</button>`);
+      });
+      container.innerHTML = chips.join('');
+    }
+
+    function toggleComplaintCategoryAll() {
+      const categories = [...new Set(sourceItems.minwon.map((item) => item.민원분류 || '미분류'))];
+      if (complaintCategoryFilter.size === categories.length) {
+        complaintCategoryFilter = new Set();
+      } else {
+        complaintCategoryFilter = new Set(categories);
+      }
+      renderComplaintFilters();
+      renderComplaintMarkers();
+      renderComplaintFeed();
+    }
+
+    function toggleComplaintCategory(category) {
+      if (complaintCategoryFilter.has(category)) {
+        complaintCategoryFilter.delete(category);
+      } else {
+        complaintCategoryFilter.add(category);
+      }
+      renderComplaintFilters();
+      renderComplaintMarkers();
+      renderComplaintFeed();
+    }
+
+    function getFilteredComplaintItems() {
+      const all = sourceItems.minwon || [];
+      if (complaintCategoryFilter.size === 0) return [];
+      return all.filter((item) => complaintCategoryFilter.has(item.민원분류 || '미분류'));
+    }
+
+    function renderFailedComplaints() {
+      const wrap = document.getElementById('failed-wrap');
+      const toggle = document.getElementById('failed-toggle');
+      const body = document.getElementById('failed-body');
+      toggle.textContent = `⚠️ 위치 미확인 ${failedComplaints.length}건`;
+
+      if (failedComplaints.length === 0) {
+        wrap.classList.remove('open');
+        failedExpanded = false;
+        body.innerHTML = '<div class="empty">위치 미확인 항목이 없습니다.</div>';
+        return;
+      }
+
+      wrap.classList.toggle('open', failedExpanded);
+      body.innerHTML = failedComplaints
+        .map((item, index) => `
+          <div class="failed-item">
+            <div class="failed-item-head">#${escapeHtml(item.순번 || String(index + 1))} · ${escapeHtml(item.민원분류 || '미분류')}</div>
+            <div class="failed-item-desc">${escapeHtml(item.발생위치 || '-')}<br>${escapeHtml((item.민원내용 || '').slice(0, 80))}</div>
+            <div class="failed-actions">
+              <input id="manual-address-${index}" class="input" type="text" placeholder="위치 직접 입력" value="${escapeAttr(item.발생위치 || '')}" />
+              <button class="btn" onclick="retryFailedGeocoding(${index})">적용</button>
+            </div>
+          </div>
+        `)
+        .join('');
+    }
+
+    function toggleFailedPanel() {
+      failedExpanded = !failedExpanded;
+      renderFailedComplaints();
+    }
+
+    async function retryFailedGeocoding(index) {
+      const item = failedComplaints[index];
+      if (!item) return;
+      const input = document.getElementById(`manual-address-${index}`);
+      const manual = (input?.value || '').trim();
+      if (!manual) return;
+
+      setGeocodingProgress('수동 위치 재확인 중...');
+      const geo = await geocodePlace(manual);
+      if (!geo) {
+        showToast('해당 주소를 찾지 못했습니다. 주소를 더 구체적으로 입력해 주세요.');
+        return;
+      }
+
+      item.발생위치 = manual;
+      item.lat = geo.lat;
+      item.lng = geo.lng;
+      sourceItems.minwon.push(item);
+      failedComplaints.splice(index, 1);
+      complaintStats.failed = failedComplaints.length;
+
+      if (!complaintCategoryFilter.has(item.민원분류 || '미분류')) {
+        complaintCategoryFilter.add(item.민원분류 || '미분류');
+      }
+
+      renderComplaintFilters();
+      renderComplaintMarkers();
+      renderComplaintFeed();
+      renderFailedComplaints();
+      updateComplaintStats();
+      setGeocodingProgress('수동 위치 적용 완료');
+      showToast('위치 적용 완료: 지도에 추가했습니다.');
+    }
+
+    function updateComplaintStats() {
+      document.getElementById('stat-total').textContent = String(complaintStats.total);
+      document.getElementById('stat-inprogress').textContent = String(complaintStats.inprogress);
+      document.getElementById('stat-assigned').textContent = String(complaintStats.assigned);
+      document.getElementById('stat-failed').textContent = String(complaintStats.failed);
+    }
+
+    function setGeocodingProgress(text) {
+      document.getElementById('geo-progress').textContent = text;
+    }
+
     async function fetchSearch(type, query, display) {
       const res = await fetch(`/api/search?type=${type}&query=${encodeURIComponent(query)}&display=${display}`);
+      if (!res.ok) throw new Error(`search ${res.status}`);
       return res.json();
     }
 
@@ -698,119 +1445,157 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items }),
       });
+      if (!res.ok) throw new Error(`extract ${res.status}`);
       const data = await res.json();
       return data.locations || [];
     }
 
-    // ─────────────────────────────────────────────
-    // 마커 렌더링
-    // ─────────────────────────────────────────────
-    function clearMarkers() {
-      markers.forEach(m => m.setMap(null));
-      markers = [];
-    }
+    async function sendChat() {
+      const input = document.getElementById('chat-input');
+      const sendBtn = document.getElementById('chat-send');
+      const question = input.value.trim();
+      if (!question) return;
 
-    function renderMarkers() {
-      clearMarkers();
-      allItems
-        .filter(it => activeFilters.has(it.source) && it.lat && it.lng)
-        .forEach((item, i) => {
-          const pos = new naver.maps.LatLng(item.lat, item.lng);
-          const color = SOURCE_COLOR[item.source];
+      input.value = '';
+      sendBtn.disabled = true;
+      appendChat('user', question);
+      chatMessages.push({ role: 'user', content: question });
 
-          const marker = new naver.maps.Marker({
-            position: pos,
-            map,
-            icon: {
-              content: `
-            <div style="
-              width:14px; height:14px; border-radius:50%;
-              background:${color}; border:2px solid rgba(255,255,255,0.3);
-              box-shadow:0 0 8px ${color}66;
-            "></div>`,
-              anchor: new naver.maps.Point(7, 7),
-            },
-          });
+      const assistantNode = appendChat('assistant', '');
 
-          naver.maps.Event.addListener(marker, 'click', () => {
-            const html = `
-          <div class="info-wrap">
-            <div class="info-source source-${item.source}">
-              <span class="source-tag source-${item.source}">${SOURCE_LABEL[item.source]}</span>
-            </div>
-            <div class="info-title">${item.title}</div>
-            ${item.place ? `<div class="info-place">📍 ${item.place}</div>` : ''}
-            <div class="info-desc">${item.desc}</div>
-            <a class="info-link" href="${item.link}" target="_blank">원문 보기 →</a>
-          </div>`;
-            infoWindow.setContent(html);
-            infoWindow.open(map, marker);
-            highlightFeedItem(i);
-          });
-
-          markers.push(marker);
+      try {
+        const res = await fetch('/api/agent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: chatMessages,
+            context: summarizeContext(allItems(), 3000),
+          }),
         });
+
+        if (!res.ok || !res.body) {
+          const errorText = await res.text();
+          throw new Error(errorText || `agent ${res.status}`);
+        }
+
+        const text = await readClaudeStream(res, assistantNode);
+        chatMessages.push({ role: 'assistant', content: text });
+      } catch (err) {
+        assistantNode.textContent = `오류: ${err.message}`;
+      } finally {
+        sendBtn.disabled = false;
+      }
     }
 
-    // ─────────────────────────────────────────────
-    // 피드 렌더링
-    // ─────────────────────────────────────────────
-    function renderFeed() {
-      const feed = document.getElementById('feed');
-      const visible = allItems.filter(it => activeFilters.has(it.source));
-      feed.innerHTML = visible.map((item, i) => `
-    <div class="feed-item" id="feed-item-${i}" onclick="focusItem(${i})">
-      <div class="feed-meta">
-        <span class="source-tag source-${item.source}">${SOURCE_LABEL[item.source]}</span>
-        <span class="feed-date">${formatDate(item.date)}</span>
-      </div>
-      <div class="feed-title">${item.title}</div>
-      <div class="feed-place">${item.place ? `📍 <span>${item.place}</span>` : '<span style="color:#8b949e">위치 미확인</span>'}</div>
-    </div>
-  `).join('');
+    function askQuick(text) {
+      const input = document.getElementById('chat-input');
+      input.value = text;
+      sendChat();
     }
 
-    function focusItem(idx) {
-      const item = allItems.filter(it => activeFilters.has(it.source))[idx];
-      if (!item?.lat) return;
-      map.setCenter(new naver.maps.LatLng(item.lat, item.lng));
-      map.setZoom(15);
-      markers[idx]?.trigger('click');
+    function appendChat(role, content) {
+      const history = document.getElementById('chat-history');
+      const node = document.createElement('div');
+      node.className = `msg ${role}`;
+      node.textContent = content;
+      history.appendChild(node);
+      history.scrollTop = history.scrollHeight;
+      return node;
     }
 
-    function highlightFeedItem(idx) {
-      document.querySelectorAll('.feed-item').forEach(el => el.classList.remove('highlighted'));
-      const el = document.getElementById(`feed-item-${idx}`);
-      if (el) { el.classList.add('highlighted'); el.scrollIntoView({ block: 'nearest' }); }
+    async function readClaudeStream(res, node) {
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let finalText = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        let sepIndex;
+        while ((sepIndex = buffer.indexOf('\n\n')) !== -1) {
+          const eventBlock = buffer.slice(0, sepIndex);
+          buffer = buffer.slice(sepIndex + 2);
+
+          const dataLines = eventBlock
+            .split('\n')
+            .filter((line) => line.startsWith('data:'))
+            .map((line) => line.replace(/^data:\s?/, ''));
+
+          for (const line of dataLines) {
+            if (!line || line === '[DONE]') continue;
+            let parsed;
+            try {
+              parsed = JSON.parse(line);
+            } catch {
+              continue;
+            }
+
+            if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+              finalText += parsed.delta.text;
+              node.textContent = finalText;
+              const history = document.getElementById('chat-history');
+              history.scrollTop = history.scrollHeight;
+            }
+          }
+        }
+      }
+
+      return finalText || '응답이 비어 있습니다.';
     }
 
-    // ─────────────────────────────────────────────
-    // 통계 업데이트
-    // ─────────────────────────────────────────────
-    function updateStats() {
-      const visible = allItems.filter(it => activeFilters.has(it.source));
-      document.getElementById('stat-total').textContent = visible.length;
-      document.getElementById('stat-mapped').textContent = visible.filter(it => it.lat).length;
-      document.getElementById('stat-sources').textContent = activeFilters.size;
+    function webInfoHtml(item) {
+      const sourceClass = `source-${item.source}`;
+      const sourceLabel = SOURCE_META[item.source]?.label || item.source;
+      const linkHtml = item.link ? `<a class="hint" style="color:#388bfd" href="${escapeAttr(item.link)}" target="_blank" rel="noopener">원문 보기 →</a>` : '';
+      return `
+        <div class="info-wrap">
+          <div class="info-meta-row"><span class="source-tag ${sourceClass}">${escapeHtml(sourceLabel)}</span></div>
+          <div class="info-title">${escapeHtml(item.title || '-')}</div>
+          <div class="info-desc">${escapeHtml(item.desc || '설명 없음')}</div>
+          <div class="info-grid">
+            ${item.place ? `<div>📍 ${escapeHtml(item.place)}</div>` : ''}
+            ${item.date ? `<div>🗓 ${escapeHtml(formatDate(item.date))}</div>` : ''}
+          </div>
+          ${linkHtml}
+        </div>
+      `;
     }
 
-    // ─────────────────────────────────────────────
-    // 헬퍼
-    // ─────────────────────────────────────────────
-    function stripTags(str = '') { return str.replace(/<[^>]+>/g, ''); }
-
-    function formatDate(str = '') {
-      if (!str) return '';
-      const d = new Date(str.length === 8
-        ? `${str.slice(0, 4)}-${str.slice(4, 6)}-${str.slice(6, 8)}`
-        : str);
-      if (isNaN(d)) return str.slice(0, 10);
-      return `${d.getMonth() + 1}/${d.getDate()}`;
+    function complaintInfoHtml(item) {
+      return `
+        <div class="info-wrap">
+          <div class="info-meta-row">
+            <span class="source-tag source-minwon">${escapeHtml(item.민원분류 || '미분류')}</span>
+            <span class="status-badge status-${item.처리현황표시}">${item.처리현황표시}</span>
+          </div>
+          <div class="info-title">민원 내용</div>
+          <div class="info-desc">${escapeHtml(item.민원내용 || '내용 없음')}</div>
+          <div class="info-grid">
+            <div>📍 발생위치: ${escapeHtml(item.발생위치 || '-')}</div>
+            <div>🗓 발생일시: ${escapeHtml(formatDate(item.발생일시 || '-'))}</div>
+            <div>🏢 담당부서: ${escapeHtml(item.담당부서 || '-')}</div>
+          </div>
+        </div>
+      `;
     }
 
-    function setProgress(pct, text) {
-      document.getElementById('progress-fill').style.width = pct + '%';
-      document.getElementById('progress-text').textContent = text;
+    function summarizeContext(items, maxLen) {
+      const lines = items.slice(0, 120).map((item, index) => {
+        if (item.source === 'minwon') {
+          return `[${index + 1}] 민원 | ${item.민원분류} | ${item.처리현황표시} | ${String(item.민원내용 || '').slice(0, 80)} | ${item.발생위치 || '-'}`;
+        }
+        const src = SOURCE_META[item.source]?.label || item.source;
+        const title = (item.title || '').slice(0, 70);
+        const place = item.place ? ` | 장소:${item.place}` : '';
+        const desc = (item.desc || '').slice(0, 120);
+        return `[${index + 1}] ${src} | ${title}${place} | ${desc}`;
+      });
+
+      const text = lines.join('\n');
+      return text.length > maxLen ? text.slice(0, maxLen) : text;
     }
 
     function showOverlay(text) {
@@ -822,14 +1607,110 @@
       document.getElementById('map-overlay').classList.remove('active');
     }
 
-    function setStatus(state) {
-      const dot = document.getElementById('status-dot');
-      const text = document.getElementById('status-text');
-      text.textContent = state;
-      dot.style.background = state === '실시간' ? '#3fb950'
-        : state === '오류' ? '#f78166' : '#8b949e';
-      dot.style.boxShadow = state === '실시간' ? '0 0 6px #3fb95088' : 'none';
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 2800);
     }
+
+    function setStatus(text) {
+      const dot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      statusText.textContent = text;
+
+      if (text === '실시간') {
+        dot.style.background = '#3fb950';
+        dot.style.boxShadow = '0 0 6px #3fb95088';
+      } else if (text === '오류') {
+        dot.style.background = '#f78166';
+        dot.style.boxShadow = 'none';
+      } else {
+        dot.style.background = '#8b949e';
+        dot.style.boxShadow = 'none';
+      }
+    }
+
+    function clean(value) {
+      return String(value ?? '').replace(/^\uFEFF/, '').trim();
+    }
+
+    function stripTags(text = '') {
+      return String(text).replace(/<[^>]*>/g, '');
+    }
+
+    function formatDate(raw = '') {
+      if (!raw || raw === '-') return raw;
+      const text = String(raw).trim();
+      if (/^\d{8}$/.test(text)) return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+      const d = new Date(text);
+      if (Number.isNaN(d.getTime())) return text;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function getTownFromAddress(address) {
+      const text = String(address || '').trim();
+      const match = text.match(/([가-힣0-9]+(?:읍|면|동))/);
+      return match ? match[1] : text;
+    }
+
+    function extractEupMyeonDong(address) {
+      const text = String(address || '').trim();
+      const match = text.match(/(화성시\s*[가-힣0-9]+(?:읍|면|동))/);
+      if (match) return `경기도 ${match[1]}`;
+      const shortMatch = text.match(/([가-힣0-9]+(?:읍|면|동))/);
+      if (shortMatch) return `경기도 화성시 ${shortMatch[1]}`;
+      return '';
+    }
+
+    function toNumber(value) {
+      if (value === null || value === undefined || value === '') return null;
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    function geocodePlace(query) {
+      const cleaned = String(query || '').trim();
+      if (!cleaned) return Promise.resolve(null);
+
+      return new Promise((resolve) => {
+        naver.maps.Service.geocode({ query: cleaned }, (status, response) => {
+          if (status !== naver.maps.Service.Status.OK) return resolve(null);
+          const addr = response.v2?.addresses?.[0];
+          if (!addr) return resolve(null);
+          resolve({ lat: Number(addr.y), lng: Number(addr.x) });
+        });
+      });
+    }
+
+    function sleep(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(value = '') {
+      return escapeHtml(value).replace(/`/g, '&#96;');
+    }
+
+    function escapeJs(value = '') {
+      return String(value).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    document.getElementById('chat-input').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChat();
+      }
+    });
   </script>
 </body>
 
